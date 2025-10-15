@@ -1,5 +1,5 @@
-from .database import Base, engine, SessionLocal
-from .models import User, Wallet
+from app.database import Base, engine, SessionLocal
+from app.models import User, Wallet
 
 def init_db():
     print("Creating database tables...")
