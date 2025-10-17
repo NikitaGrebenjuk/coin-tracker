@@ -36,4 +36,4 @@ def update_wallet_balance(address: str, db: Session = Depends(get_db)):
     if not db_wallet:
         raise HTTPException(status_code=404, detail="Wallet not found")
     new_balance = wallet_service.WalletService.update_balance(address)
-    return wallet_crud.update_wallet_balance(db, new_balance, address)
+    return wallet_crud.update_wallet_balance(db, new_balance, db_wallet)

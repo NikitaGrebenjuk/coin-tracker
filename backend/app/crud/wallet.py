@@ -26,11 +26,11 @@ def get_wallet_by_address(db: Session, address: str) -> models.Wallet | None:
 def get_wallets_by_user_id(db: Session, user_id: int) -> list[models.Wallet]:
     return db.query(models.Wallet).filter(models.Wallet.user_id == user_id).all()
 
-def update_wallet_balance(db: Session, new_balance: float, address: str) -> models.Wallet:
-    wallet=db.query(models.Wallet).filter(models.Wallet.address == address).first()
-    wallet.balance_btc = new_balance
-    wallet.last_checked = datetime.utcnow()
-    db.add(wallet)
-    db.commit()
-    db.refresh(wallet)
-    return wallet
+def update_wallet_balance(db: Session, new_balance: float, db_wallet: models.Wallet) -> models.Wallet:
+    if new_balance is not None:
+        db_wallet.balance_btc = new_balance
+        db_wallet.last_checked = datetime.utcnow()
+        db.add(db_wallet)
+        db.commit()
+        db.refresh(db_wallet)
+    return db_wallet

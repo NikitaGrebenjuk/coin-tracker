@@ -10,7 +10,7 @@ class WalletService:
     """
 
     @staticmethod
-    def update_balance(wallet_address: str) -> models.Wallet | None:
+    def update_balance(wallet_address: str) -> float | None:
 
         client = BlockCypherClient()
 
@@ -19,6 +19,6 @@ class WalletService:
         except Exception as e:
             # Option: Logging oder spezifischere Fehlermeldungen
             print(f"BlockCypher API error: {e}")
-            return db_wallet
+            return None
 
-        return wallet_info.balance_btc
+        return wallet_info.balance_btc      
