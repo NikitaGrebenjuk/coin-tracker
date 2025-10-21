@@ -1,17 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import List, Optional
-
-
-class WalletRead(BaseModel):
-    id: int
-    address: str
-    label: Optional[str] = None
-    balance_btc: float
-    last_checked: Optional[datetime] = None
-
-    class Config:
-        orm_mode = True
+from app.schemas.wallet import WalletRead
 
 
 class UserBase(BaseModel):

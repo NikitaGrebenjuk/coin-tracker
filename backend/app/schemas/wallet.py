@@ -9,12 +9,12 @@ class WalletBase(BaseModel):
 class WalletCreate(WalletBase):
     user_id: int
 
-class WalletRead(WalletBase):
+class WalletRead(BaseModel):
     id: int
+    address: str
     label: Optional[str] = None
-    balance_btc: float
+    balance_btc: Optional[float] = None
     last_checked: Optional[datetime] = None
-    user_id: int
 
     class Config:
         orm_mode = True

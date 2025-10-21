@@ -1,3 +1,4 @@
+from app.services.auth_service import get_current_user
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
@@ -25,10 +26,9 @@ def create_wallet(wallet: schemas.WalletCreate, db: Session = Depends(get_db)):
 def list_wallets(db: Session = Depends(get_db)):
     return wallet_crud.get_wallets(db=db)
 
-@router.get("/by_user_id", response_model=list[schemas.WalletRead])
+@router.get("/by_user_id/{user_id}/", response_model=list[schemas.WalletRead])
 def get_wallets_by_user_id(user_id: int, db: Session = Depends(get_db)):
-    wallets = wallet_crud.get_wallets_by_user_id(db, user_id=user_id)
-    return wallets
+    return wallet_crud.get_wallets_by_user_id(db, user_id=user_id) 
 
 @router.get("/by_address/{address}/update", response_model=schemas.WalletRead)
 def update_wallet_balance(address: str, db: Session = Depends(get_db)):

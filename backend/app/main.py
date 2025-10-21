@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI
-from .database import engine, Base
-from .routers import user, wallet
+from app.database import engine, Base
+from app.routers import user, wallet, auth
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.services.wallet_service import WalletService
 from app.crud import wallet as wallet_crud
@@ -20,6 +20,7 @@ scheduler = BackgroundScheduler()
 # Router einbinden
 app.include_router(user.router)
 app.include_router(wallet.router)
+app.include_router(auth.router)
 
 # Einfache Root-Route
 @app.get("/")

@@ -1,6 +1,3 @@
-from datetime import datetime
-from sqlalchemy.orm import Session
-from app import models, crud
 from app.utils.btc_client import BlockCypherClient
 
 

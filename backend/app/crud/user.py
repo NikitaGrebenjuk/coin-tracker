@@ -2,7 +2,8 @@ from sqlalchemy.orm import Session
 from app import models
 from app.schemas.user import UserCreate
 from datetime import datetime
-from hashlib import sha256
+from app.core.security import get_password_hash
+
 
 
 def get_users(db: Session):
@@ -16,7 +17,7 @@ def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 def create_user(db: Session, user: UserCreate):
-    hashed_pw = sha256(user.password.encode("utf-8")).hexdigest()
+    hashed_pw = get_password_hash(user.password)
     db_user = models.User(
         username=user.username,
         email=user.email,

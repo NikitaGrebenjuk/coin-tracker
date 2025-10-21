@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from app import models
 from app.schemas.wallet import WalletCreate
 from datetime import datetime
-from app.utils import btc_client
 
 def create_wallet(db: Session, wallet: WalletCreate) -> models.Wallet:
     db_wallet = models.Wallet(
