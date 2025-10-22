@@ -1,4 +1,5 @@
 from app.services.auth_service import get_current_user
+from app.models import User
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
@@ -6,7 +7,11 @@ from app.crud import wallet as wallet_crud
 from app.schemas import wallet as schemas
 from app.services import wallet_service
 
-router = APIRouter(prefix="/wallets", tags=["wallets"])
+router = APIRouter(
+    prefix="/wallets"
+    , tags=["wallets"]
+    , dependencies=[Depends(get_current_user)]
+    )
 
 
 def get_db():
@@ -25,6 +30,14 @@ def create_wallet(wallet: schemas.WalletCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=list[schemas.WalletRead])
 def list_wallets(db: Session = Depends(get_db)):
     return wallet_crud.get_wallets(db=db)
+
+@router.get("/my_wallets", response_model=list[schemas.WalletRead])
+def get_my_wallets(
+    db: Session = Depends(get_db)
+    # , current_user: User = Depends(get_current_user)  # wir wollen ja die ID
+):
+    user_id = get_current_user(db).id
+    return wallet_crud.get_wallets_by_user_id(db, user_id=user_id)
 
 @router.get("/by_user_id/{user_id}/", response_model=list[schemas.WalletRead])
 def get_wallets_by_user_id(user_id: int, db: Session = Depends(get_db)):

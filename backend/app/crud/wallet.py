@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from app import models
-from app.schemas.wallet import WalletCreate
+from app.schemas.wallet import WalletCreate,WalletRead
 from datetime import datetime
 
-def create_wallet(db: Session, wallet: WalletCreate) -> models.Wallet:
+def create_wallet(db: Session, wallet: WalletCreate) -> WalletRead:
     db_wallet = models.Wallet(
         address=wallet.address,
         user_id=wallet.user_id,
@@ -16,16 +16,16 @@ def create_wallet(db: Session, wallet: WalletCreate) -> models.Wallet:
     db.refresh(db_wallet)
     return db_wallet
 
-def get_wallets(db: Session) -> list[models.Wallet]:
+def get_wallets(db: Session) -> list[WalletRead]:
     return db.query(models.Wallet).all()
 
-def get_wallet_by_address(db: Session, address: str) -> models.Wallet | None:
+def get_wallet_by_address(db: Session, address: str) -> WalletRead | None:
     return db.query(models.Wallet).filter(models.Wallet.address == address).first()
 
-def get_wallets_by_user_id(db: Session, user_id: int) -> list[models.Wallet]:
+def get_wallets_by_user_id(db: Session, user_id: int) -> list[WalletRead]:
     return db.query(models.Wallet).filter(models.Wallet.user_id == user_id).all()
 
-def update_wallet_balance(db: Session, new_balance: float, db_wallet: models.Wallet) -> models.Wallet:
+def update_wallet_balance(db: Session, new_balance: float, db_wallet: models.Wallet) -> WalletRead:
     if new_balance is not None:
         db_wallet.balance_btc = new_balance
         db_wallet.last_checked = datetime.utcnow()

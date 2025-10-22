@@ -18,5 +18,6 @@ class UserRead(UserBase):
     created_at: Optional[datetime] = None
     wallets: List[WalletRead] = []
 
-    class Config:
-        orm_mode = True
+    model_config = {  # Pydantic v2
+        "from_attributes": True  # vorher: orm_mode = True
+    }

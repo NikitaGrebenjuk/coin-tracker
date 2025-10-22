@@ -3,10 +3,16 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.crud import user as user_crud
 from app.schemas import user as schemas
-from app.database import SessionLocal
+from app.schemas.wallet import WalletRead
+from app.models import User
+from app.services.auth_service import get_current_user
+from app.crud import wallet as wallet_crud
+from app.schemas.auth import Token
 
-
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(
+    prefix="/users",
+    tags=["users"]
+)
 
 
 def get_db():
@@ -43,3 +49,10 @@ def get_user_by_email(email: str, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+# @router.get("/my_wallets", response_model=list[WalletRead])
+# def read_my_wallets(current_user : User = Depends(get_current_user), db: Session = Depends(get_db)):
+#     print(f"DEBUG Current user: {current_user}")
+#     if not current_user:
+#         raise HTTPException(status_code=404, detail="not authenticated")    
+#     return wallet_crud.get_wallets_by_user_id(db, current_user.id)

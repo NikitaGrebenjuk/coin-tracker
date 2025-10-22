@@ -7,14 +7,16 @@ class WalletBase(BaseModel):
     user_id: int
 
 class WalletCreate(WalletBase):
-    user_id: int
+    label: str| None = None
 
-class WalletRead(BaseModel):
+class WalletRead(WalletBase):
     id: int
-    address: str
-    label: Optional[str] = None
-    balance_btc: Optional[float] = None
-    last_checked: Optional[datetime] = None
+    user_id: int
+    label: str | None = None
+    balance_btc: float
+    last_checked: datetime | None = None
+    created_at : datetime | None = None
 
-    class Config:
-        orm_mode = True
+    model_config = {  # Pydantic v2
+        "from_attributes": True  # vorher: orm_mode = True
+    }

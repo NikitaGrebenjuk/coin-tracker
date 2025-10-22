@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app import models
-from app.schemas.user import UserCreate
+from app.schemas.user import UserCreate, UserRead
 from datetime import datetime
 from app.core.security import get_password_hash
 
@@ -13,7 +13,7 @@ def get_users(db: Session):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def get_user_by_id(db: Session, user_id: int):
+def get_user_by_id(db: Session, user_id: int) -> UserRead:
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 def create_user(db: Session, user: UserCreate):
