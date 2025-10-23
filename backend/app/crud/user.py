@@ -5,7 +5,6 @@ from datetime import datetime
 from app.core.security import get_password_hash
 
 
-
 def get_users(db: Session):
     return db.query(models.User).all()
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import List, Optional
 from app.schemas.wallet import WalletRead
@@ -18,6 +18,4 @@ class UserRead(UserBase):
     created_at: Optional[datetime] = None
     wallets: List[WalletRead] = []
 
-    model_config = {  # Pydantic v2
-        "from_attributes": True  # vorher: orm_mode = True
-    }
+    model_config = ConfigDict(from_attributes=True)  # <- wichtig in v2

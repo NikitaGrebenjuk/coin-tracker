@@ -3,10 +3,10 @@ from app import models
 from app.schemas.wallet import WalletCreate,WalletRead
 from datetime import datetime
 
-def create_wallet(db: Session, wallet: WalletCreate) -> WalletRead:
+def create_wallet(db: Session, wallet: WalletCreate, current_user: models.User) -> WalletRead:
     db_wallet = models.Wallet(
         address=wallet.address,
-        user_id=wallet.user_id,
+        user_id=current_user.id,
         balance_btc=0.0,
         created_at=datetime.utcnow(),
         last_checked=None,

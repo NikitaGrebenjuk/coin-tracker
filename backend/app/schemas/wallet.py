@@ -1,22 +1,22 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 
 class WalletBase(BaseModel):
     address: str
-    user_id: int
+
 
 class WalletCreate(WalletBase):
-    label: str| None = None
-
-class WalletRead(WalletBase):
-    id: int
     user_id: int
-    label: str | None = None
-    balance_btc: float
-    last_checked: datetime | None = None
-    created_at : datetime | None = None
+    label: Optional[str] = None
 
-    model_config = {  # Pydantic v2
-        "from_attributes": True  # vorher: orm_mode = True
-    }
+class WalletRead(BaseModel):
+    id: int
+    address: str
+    label: Optional[str] = None
+    balance_btc: Decimal
+    last_checked: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)  # <- wichtig in v2
+    
