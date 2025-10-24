@@ -19,7 +19,12 @@ def authenticate_user(
     user = get_user_by_email(db, user_email)
     if not user:
         return None
-    if not verify_password(password, user.hashed_password):
+    try:
+        verified = verify_password(password, user.hashed_password)
+    except Exception as e:
+        print(f"DEBUG: Password verification failed: Exception n\{e}")
+        return None
+    if not verified:
         return None
     return user
 

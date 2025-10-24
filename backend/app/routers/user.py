@@ -54,3 +54,26 @@ def read_my_wallets(
             detail="not authenticated"
             )    
     return wallet_crud.get_wallets_by_user_id(db, current_user.id)
+
+@router.delete("/{user_id}/", response_model=dict)
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db)
+    ):
+    db_user = user_crud.get_user_by_id(db, user_id=user_id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_crud.delete_user(db, db_user)
+    return {"detail": "User deleted"}
+
+@router.put("/{user_id}/", response_model=schemas.UserRead)
+def update_user(
+    user_id: int,
+    new_data: dict,
+    db: Session = Depends(get_db)
+    ):
+    db_user = user_crud.get_user_by_id(db, user_id=user_id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    updated_user = user_crud.update_user(db, db_user, new_data)
+    return updated_user

@@ -27,3 +27,22 @@ def create_user(db: Session, user: UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def update_user(
+        db: Session,
+        db_user: models.User,
+        new_data: dict
+        ) -> UserRead:
+    for key, value in new_data.items():
+        if hasattr(db_user, key) and value is not None:
+            setattr(db_user, key, value)
+    if "password" in new_data and new_data["password"] is not None:
+        db_user.hashed_password = get_password_hash(new_data["password"])
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def delete_user(db: Session, db_user: models.User):
+    db.delete(db_user)
+    db.commit()

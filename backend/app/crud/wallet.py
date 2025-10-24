@@ -3,10 +3,14 @@ from app import models
 from app.schemas.wallet import WalletCreate,WalletRead
 from datetime import datetime
 
-def create_wallet(db: Session, wallet: WalletCreate, current_user: models.User) -> WalletRead:
+def create_wallet(
+        db: Session,
+        wallet: WalletCreate,
+        user: models.User
+        ) -> WalletRead:
     db_wallet = models.Wallet(
         address=wallet.address,
-        user_id=current_user.id,
+        user_id=user.id,
         balance_btc=0.0,
         created_at=datetime.utcnow(),
         last_checked=None,
@@ -32,4 +36,21 @@ def update_wallet_balance(db: Session, new_balance: float, db_wallet: models.Wal
         db.add(db_wallet)
         db.commit()
         db.refresh(db_wallet)
+    return db_wallet
+
+def delete_wallet(db: Session, db_wallet: models.Wallet):
+    db.delete(db_wallet)
+    db.commit()
+
+def update_wallet(
+        db: Session,
+        db_wallet: models.Wallet,
+        new_data: dict
+        ) -> WalletRead:
+    for key, value in new_data.items():
+        if hasattr(db_wallet, key) and value is not None:
+            setattr(db_wallet, key, value)
+    db.add(db_wallet)
+    db.commit()
+    db.refresh(db_wallet)
     return db_wallet
