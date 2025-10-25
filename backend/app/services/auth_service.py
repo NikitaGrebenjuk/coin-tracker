@@ -29,7 +29,10 @@ def authenticate_user(
     return user
 
 def login_get_token(user):
-    data = {"sub": str(user.id), "role": user.role if hasattr(user, "role") else "user"}
+    data = {
+        "sub": str(user.id),
+        "role": user.role if hasattr(user, "role") else "user"
+        }
     access_token = create_access_token(data=data)
     return access_token
 

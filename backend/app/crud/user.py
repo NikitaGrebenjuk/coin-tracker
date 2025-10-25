@@ -21,6 +21,7 @@ def create_user(db: Session, user: UserCreate):
         username=user.username,
         email=user.email,
         hashed_password=hashed_pw,
+        role=user.role if hasattr(user, "role") else "user",
         created_at=datetime.utcnow()
     )
     db.add(db_user)

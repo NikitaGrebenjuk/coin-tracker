@@ -2,7 +2,12 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Numeric
 from app.database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, DateTime, Enum as SqlEnum
+import enum
 
+class RoleEnum(str, enum.Enum):
+    user = "user"
+    admin = "admin"
 
 class Wallet(Base):
     __tablename__ = "wallets"
@@ -28,6 +33,7 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    role = Column(SqlEnum(RoleEnum), default=RoleEnum.user)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     wallets = relationship("Wallet", back_populates="user", cascade="all, delete-orphan", lazy="joined")
